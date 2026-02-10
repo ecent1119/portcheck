@@ -23,6 +23,15 @@ Find port collisions before `docker compose up` fails.
 
 ---
 
+## New in v2.0
+
+- **Runtime scanning** — check actual running containers for port usage
+- **Port suggestions** — automatically suggest free ports for conflicts
+- **Profile-aware** — consider only active compose profiles
+- **Host IP analysis** — show bind address details for each port
+
+---
+
 ## Example output
 
 ```
