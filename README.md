@@ -122,6 +122,18 @@ port-check:
 
 ---
 
+## Common problems this solves
+
+- "docker compose port already in use"
+- "port conflict docker compose"
+- "find which container uses port"
+- "multiple compose files same port"
+- "docker port collision detection"
+- "address already in use docker"
+- "check port availability before docker up"
+
+---
+
 ## Get it
 
 👉 [Download on Gumroad](https://ecent.gumroad.com/l/rxgcia)
@@ -136,6 +148,10 @@ port-check:
 | **[compose-flatten](https://github.com/ecent119/compose-flatten)** | Merge compose files |
 | **[devcheck](https://github.com/ecent119/devcheck)** | Validate compose configurations |
 | **[compose-diff](https://github.com/ecent119/compose-diff)** | Compare compose files |
+
+---
+
+If this tool saved you time, consider starring the repo.
 
 ---
 
