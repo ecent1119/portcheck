@@ -124,8 +124,6 @@ port-check:
 
 ## Get it
 
-**$19** — one-time purchase, standalone macOS/Linux/Windows binary.
-
 👉 [Download on Gumroad](https://ecent.gumroad.com/l/rxgcia)
 
 ---
