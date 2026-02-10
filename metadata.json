@@ -1,0 +1,22 @@
+{
+  "name": "portcheck",
+  "display_name": "PortCheck",
+  "tagline": "Local Port Collision Detector",
+  "description": "Detect port collisions and conflicts in Docker Compose files before running containers.",
+  "version": "1.0.0",
+  "price_usd": 19,
+  "gumroad_url": "https://ecent.gumroad.com/l/rxgcia",
+  "category": "utility",
+  "tags": ["docker", "compose", "ports", "networking", "validation"],
+  "features": [
+    "Port collision detection",
+    "Host port conflict checking",
+    "Multi-file scanning",
+    "Profile-aware analysis",
+    "Quick validation output"
+  ],
+  "platforms": ["darwin-amd64", "darwin-arm64", "linux-amd64", "linux-arm64", "windows-amd64"],
+  "repository": "https://github.com/ecent119/portcheck",
+  "commands": ["scan"],
+  "related": ["compose-flatten", "devcheck", "compose-diff", "stackgen"]
+}
