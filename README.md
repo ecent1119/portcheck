@@ -1,160 +1,108 @@
 # portcheck
 
-Find port collisions before `docker compose up` fails.
+**Free and open source** — Local Port Collision Detector. Instantly find port conflicts in your Docker Compose stacks.
 
----
+## The Problem
 
-## The problem
+"Port already in use" is the most common local Docker error. It happens because:
 
-- `docker compose up` fails with "port already in use"
-- Multiple services in different compose files bind to the same port
-- Port conflicts only discovered at runtime
-- Privileged ports (< 1024) require root and cause silent failures
+- Multiple compose services bind the same port
+- Multiple stacks running simultaneously with overlapping ports
+- Forgetting which ports are in use
+- Privileged ports requiring sudo permissions
 
----
+## What It Does
 
-## What it does
-
-- Scans all compose files in a directory (including subdirectories)
-- Detects **port collisions** between services
-- Warns about **privileged ports** that may fail without root
-- Checks **port ranges** for overlaps
-- Shows which service owns which host port
-
----
-
-## New in v2.0
-
+- Detects host port collisions in compose files
+- Identifies same port reused across stacks
+- Warns on privileged ports (< 1024)
+- Identifies potential conflicts with common services
 - **Runtime scanning** — check actual running containers for port usage
 - **Port suggestions** — automatically suggest free ports for conflicts
 - **Profile-aware** — consider only active compose profiles
 - **Host IP analysis** — show bind address details for each port
 
----
-
-## Example output
-
-```
-$ portcheck scan
-
-Port Analysis Report
-====================
-
-📍 Host Port Bindings:
-  80   → nginx (docker-compose.yml)
-  443  → nginx (docker-compose.yml)
-  3000 → api (docker-compose.yml)
-  5432 → postgres (docker-compose.yml)
-  8080 → web (services/web/docker-compose.yml)
-
-⚠️  Issues Found:
-
-  COLLISION: Port 8080
-    - web (services/web/docker-compose.yml)
-    - admin (services/admin/docker-compose.yml)
-
-  PRIVILEGED: Port 80
-    - nginx (docker-compose.yml)
-    - Requires root/sudo to bind
-
-  PRIVILEGED: Port 443
-    - nginx (docker-compose.yml)
-    - Requires root/sudo to bind
-
-Summary: 2 collisions, 2 privileged ports
-```
-
----
-
-## Commands
+## Usage
 
 ```bash
 # Scan current directory
 portcheck scan
 
-# Scan specific directory
-portcheck scan --path ./microservices
+# Scan specific path
+portcheck scan ./my-project
 
-# JSON output for CI
+# Strict mode (exit 1 on any issues, for CI)
+portcheck scan --strict
+
+# JSON output
 portcheck scan --format json
 
-# Exit with error if issues found (for CI)
-portcheck scan --strict
+# Check running containers too
+portcheck scan --runtime
+
+# Get alternative port suggestions
+portcheck scan --suggest
+
+# Only check specific profiles
+portcheck scan --profile dev --profile tools
+
+# Show host IP binding details
+portcheck scan --show-host-ip
 ```
 
----
+## Example Output
 
-## What it checks
+```
+Port Check Report
+=================
 
-| Check | Description |
-|-------|-------------|
-| **Collisions** | Multiple services binding same host port |
-| **Privileged** | Ports < 1024 requiring elevated privileges |
-| **Ranges** | Port range overlaps (e.g., 8080-8090) |
-| **Protocols** | TCP vs UDP conflicts |
-| **Interfaces** | 0.0.0.0 vs 127.0.0.1 binding issues |
+Scanned: .
+Compose files: 2
+Port bindings: 5
+Issues found: 2
 
----
+❌ ERRORS
+---------
+
+Port 3000: Port 3000 bound by multiple services
+  → 3000:3000 in docker-compose.yml (frontend)
+  → 3000:3000 in docker-compose.dev.yml (api)
+
+⚠️  WARNINGS
+-----------
+
+Port 80: Port 80 is privileged (requires root/sudo)
+  → 80:80 in docker-compose.yml (nginx)
+```
 
 ## CI Integration
 
 ```yaml
-# GitHub Actions
-- name: Check for port conflicts
-  run: portcheck scan --strict --format json
-
-# GitLab CI
-port-check:
-  script:
-    - portcheck scan --strict
-  allow_failure: false
+# GitHub Actions example
+- name: Check ports
+  run: portcheck scan --strict
 ```
 
----
+## Installation
 
-## Scope
+Download the appropriate binary for your platform from the GitHub releases page.
 
-- Local development and testing only
-- Read-only analysis of compose files
-- No runtime port checking
-- No network scanning
-- No telemetry, no network calls
+## Related Tools
 
----
+- [envmerge](https://github.com/ecent1119/envmerge) — Resolve env variable conflicts
+- [compose-flatten](https://github.com/ecent1119/compose-flatten) — Merge compose overrides
+- [stackgen](https://github.com/ecent1119/stackgen) — Generate local Docker Compose stacks
 
-## Common problems this solves
+## Support This Project
 
-- "docker compose port already in use"
-- "port conflict docker compose"
-- "find which container uses port"
-- "multiple compose files same port"
-- "docker port collision detection"
-- "address already in use docker"
-- "check port availability before docker up"
+**portcheck is free and open source.**
 
----
+If this tool saved you time, consider sponsoring:
 
-## Get it
+[![Sponsor on GitHub](https://img.shields.io/badge/Sponsor-❤️-red?logo=github)](https://github.com/sponsors/ecent1119)
 
-👉 [Download on Gumroad](https://ecent.gumroad.com/l/rxgcia)
-
----
-
-## Related tools
-
-| Tool | Purpose |
-|------|---------|
-| **[stackgen](https://github.com/ecent119/stackgen)** | Generate Docker Compose stacks |
-| **[compose-flatten](https://github.com/ecent119/compose-flatten)** | Merge compose files |
-| **[devcheck](https://github.com/ecent119/devcheck)** | Validate compose configurations |
-| **[compose-diff](https://github.com/ecent119/compose-diff)** | Compare compose files |
-
----
-
-If this tool saved you time, consider starring the repo.
-
----
+Your support helps maintain and improve this tool.
 
 ## License
 
-MIT — this repository contains documentation and examples only.
+MIT License. See LICENSE file.
